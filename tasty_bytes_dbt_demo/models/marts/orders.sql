@@ -1,3 +1,4 @@
+/* test comment */
 SELECT 
     oh.order_id,
     oh.truck_id,
