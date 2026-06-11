@@ -38,12 +38,13 @@
 -- =============================================================================
 
 -- CREATE DATABASE IF NOT EXISTS sandbox_db;
--- CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_dev;
--- CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_prod;
--- -- Used for storing objects Snowflake needs for GitHub integration (secrets, etc.)
--- CREATE SCHEMA IF NOT EXISTS sandbox_db.integrations;
--- -- Used for the Tasty Bytes foundational source data loaded from S3
--- CREATE SCHEMA IF NOT EXISTS sandbox_db.raw;
+CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_dev;
+CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_prod;
+-- Used for storing objects Snowflake needs for GitHub integration (secrets, etc.)
+CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_integrations;
+-- Used for the Tasty Bytes foundational source data loaded from S3
+CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_raw;
+CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_public;
 
 -- =============================================================================
 -- STEP 3: Enable logging, tracing, and metrics
