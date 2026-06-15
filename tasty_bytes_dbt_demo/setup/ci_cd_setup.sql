@@ -15,23 +15,23 @@
 
 -- Option 1: Create an empty database with dev and prod schemas
 -- This is the simplest approach when you're starting from scratch.
-CREATE DATABASE IF NOT EXISTS tasty_bytes_dbt_db;
-CREATE SCHEMA IF NOT EXISTS tasty_bytes_dbt_db.dev;
-CREATE SCHEMA IF NOT EXISTS tasty_bytes_dbt_db.prod;
+CREATE DATABASE IF NOT EXISTS sandbox_db;
+CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_dev;
+CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_prod;
 
 -- Option 2: Clone your production database
 -- Use Snowflake's zero-copy cloning to create a full replica of your production database.
 -- This gives you a high-fidelity testing environment and is cost-effective because you
 -- only pay storage for tables that change during dbt runs.
--- CREATE DATABASE IF NOT EXISTS tasty_bytes_dbt_db CLONE other_tasty_bytes_dbt_db;
+-- CREATE DATABASE IF NOT EXISTS sandbox_db CLONE other_sandbox_db;
 
 -- Option 3: Create an empty dev database and clone the production schemas you need
 -- Use this method when you only need specific schemas for testing.
--- CREATE DATABASE IF NOT EXISTS tasty_bytes_dbt_db;
+-- CREATE DATABASE IF NOT EXISTS sandbox_db;
 
 -- Repeat the line below for other necessary schemas
--- CREATE SCHEMA IF NOT EXISTS tasty_bytes_dbt_db.dev CLONE other_tasty_bytes_dbt_db.dev;
--- CREATE SCHEMA IF NOT EXISTS tasty_bytes_dbt_db.prod CLONE other_tasty_bytes_dbt_db.prod;
+-- CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_dev CLONE other_sandbox_db.rs_dev;
+-- CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_prod CLONE other_sandbox_db.rs_prod;
 
 -- =============================================================================
 -- STEP 2: Create a GitHub service user in Snowflake (recommended)
