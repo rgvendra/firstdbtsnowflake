@@ -44,7 +44,7 @@ CREATE USER IF NOT EXISTS github_actions_service_user
   WORKLOAD_IDENTITY = (
     TYPE = OIDC
     ISSUER = 'https://token.actions.githubusercontent.com',
-    SUBJECT = 'repo:your_repo_org/your_dbt_repo:environment:prod'
+    SUBJECT = 'repo:rogersillito/getting-started-with-dbt-on-snowflake:environment:prod'
   )
   DEFAULT_ROLE = ACCOUNTADMIN
   COMMENT = 'Service user for GitHub Actions';
@@ -55,7 +55,7 @@ CREATE USER IF NOT EXISTS github_actions_service_user
 GRANT ROLE ACCOUNTADMIN TO USER github_actions_service_user;
 
 -- Set a default warehouse:
-ALTER USER github_actions_service_user SET DEFAULT_WAREHOUSE = 'tasty_bytes_dbt_wh';
+ALTER USER github_actions_service_user SET DEFAULT_WAREHOUSE = 'sandbox_wh';
 
 -- Alternative: PAT-based authentication (less secure)
 -- If you prefer to use one Snowflake user across multiple repositories, or cannot use
@@ -95,12 +95,13 @@ ALTER USER github_actions_service_user SET DEFAULT_WAREHOUSE = 'tasty_bytes_dbt_
 -- Option 1: Create a new network policy and apply it to the user
 -- A Snowflake user can have only one network policy at a time. If the user doesn't
 -- have one or you want to replace the existing policy, complete the following steps:
-CREATE NETWORK POLICY github_actions_policy
-  ALLOWED_NETWORK_RULE_LIST = ('SNOWFLAKE.NETWORK_SECURITY.GITHUBACTIONS_GLOBAL', <other required rules>)
-  BLOCKED_NETWORK_RULE_LIST = ();
+-- CREATE NETWORK POLICY github_actions_policy
+--   -- ALLOWED_NETWORK_RULE_LIST = ('SNOWFLAKE.NETWORK_SECURITY.GITHUBACTIONS_GLOBAL', <other required rules>)
+--   ALLOWED_NETWORK_RULE_LIST = ('SNOWFLAKE.NETWORK_SECURITY.GITHUBACTIONS_GLOBAL')
+--   BLOCKED_NETWORK_RULE_LIST = ();
 
-ALTER USER GitHub_Actions_Service_User
-  SET NETWORK_POLICY = github_actions_policy;
+-- ALTER USER GitHub_Actions_Service_User
+--   SET NETWORK_POLICY = github_actions_policy;
 
 -- Option 2: Add a network rule to an existing network policy
 -- If the user already has a network policy, you can add the GitHub Actions rule to it.
