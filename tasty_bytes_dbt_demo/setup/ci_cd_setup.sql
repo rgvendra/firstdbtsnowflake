@@ -15,23 +15,23 @@
 
 -- Option 1: Create an empty database with dev and prod schemas
 -- This is the simplest approach when you're starting from scratch.
-CREATE DATABASE IF NOT EXISTS tasty_bytes_dbt_db;
-CREATE SCHEMA IF NOT EXISTS tasty_bytes_dbt_db.dev;
-CREATE SCHEMA IF NOT EXISTS tasty_bytes_dbt_db.prod;
+CREATE DATABASE IF NOT EXISTS sandbox_db;
+CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_dev;
+CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_prod;
 
 -- Option 2: Clone your production database
 -- Use Snowflake's zero-copy cloning to create a full replica of your production database.
 -- This gives you a high-fidelity testing environment and is cost-effective because you
 -- only pay storage for tables that change during dbt runs.
--- CREATE DATABASE IF NOT EXISTS tasty_bytes_dbt_db CLONE other_tasty_bytes_dbt_db;
+-- CREATE DATABASE IF NOT EXISTS sandbox_db CLONE other_sandbox_db;
 
 -- Option 3: Create an empty dev database and clone the production schemas you need
 -- Use this method when you only need specific schemas for testing.
--- CREATE DATABASE IF NOT EXISTS tasty_bytes_dbt_db;
+-- CREATE DATABASE IF NOT EXISTS sandbox_db;
 
 -- Repeat the line below for other necessary schemas
--- CREATE SCHEMA IF NOT EXISTS tasty_bytes_dbt_db.dev CLONE other_tasty_bytes_dbt_db.dev;
--- CREATE SCHEMA IF NOT EXISTS tasty_bytes_dbt_db.prod CLONE other_tasty_bytes_dbt_db.prod;
+-- CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_dev CLONE other_sandbox_db.rs_dev;
+-- CREATE SCHEMA IF NOT EXISTS sandbox_db.rs_prod CLONE other_sandbox_db.rs_prod;
 
 -- =============================================================================
 -- STEP 2: Create a GitHub service user in Snowflake (recommended)
@@ -44,7 +44,7 @@ CREATE USER IF NOT EXISTS github_actions_service_user
   WORKLOAD_IDENTITY = (
     TYPE = OIDC
     ISSUER = 'https://token.actions.githubusercontent.com',
-    SUBJECT = 'repo:your_repo_org/your_dbt_repo:environment:prod'
+    SUBJECT = 'repo:rogersillito/getting-started-with-dbt-on-snowflake:environment:prod'
   )
   DEFAULT_ROLE = ACCOUNTADMIN
   COMMENT = 'Service user for GitHub Actions';
@@ -55,7 +55,7 @@ CREATE USER IF NOT EXISTS github_actions_service_user
 GRANT ROLE ACCOUNTADMIN TO USER github_actions_service_user;
 
 -- Set a default warehouse:
-ALTER USER github_actions_service_user SET DEFAULT_WAREHOUSE = 'tasty_bytes_dbt_wh';
+ALTER USER github_actions_service_user SET DEFAULT_WAREHOUSE = 'sandbox_wh';
 
 -- Alternative: PAT-based authentication (less secure)
 -- If you prefer to use one Snowflake user across multiple repositories, or cannot use
@@ -95,12 +95,13 @@ ALTER USER github_actions_service_user SET DEFAULT_WAREHOUSE = 'tasty_bytes_dbt_
 -- Option 1: Create a new network policy and apply it to the user
 -- A Snowflake user can have only one network policy at a time. If the user doesn't
 -- have one or you want to replace the existing policy, complete the following steps:
-CREATE NETWORK POLICY github_actions_policy
-  ALLOWED_NETWORK_RULE_LIST = ('SNOWFLAKE.NETWORK_SECURITY.GITHUBACTIONS_GLOBAL', <other required rules>)
-  BLOCKED_NETWORK_RULE_LIST = ();
+-- CREATE NETWORK POLICY github_actions_policy
+--   -- ALLOWED_NETWORK_RULE_LIST = ('SNOWFLAKE.NETWORK_SECURITY.GITHUBACTIONS_GLOBAL', <other required rules>)
+--   ALLOWED_NETWORK_RULE_LIST = ('SNOWFLAKE.NETWORK_SECURITY.GITHUBACTIONS_GLOBAL')
+--   BLOCKED_NETWORK_RULE_LIST = ();
 
-ALTER USER GitHub_Actions_Service_User
-  SET NETWORK_POLICY = github_actions_policy;
+-- ALTER USER GitHub_Actions_Service_User
+--   SET NETWORK_POLICY = github_actions_policy;
 
 -- Option 2: Add a network rule to an existing network policy
 -- If the user already has a network policy, you can add the GitHub Actions rule to it.
