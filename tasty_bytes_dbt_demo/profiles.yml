@@ -1,4 +1,4 @@
-tasty_bytes:
+bcbspoc:
   target: dev
   outputs:
     dev:
