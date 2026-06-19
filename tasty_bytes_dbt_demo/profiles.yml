@@ -3,19 +3,19 @@ bcbspoc:
   outputs:
     dev:
       type: snowflake
-      account: 'not needed'
-      user: 'not needed'
+      account: nu51811
+      user: sriramk
       role: accountadmin
-      database: tasty_bytes_dbt_db
+      database: BCBS_DBT_DB
       schema: dev
-      warehouse: tasty_bytes_dbt_wh
+      warehouse: COMPUTE_WH
       threads: 8
     prod:
       type: snowflake
-      account: 'not needed'
-      user: 'not needed'
+      account: nu51811
+      user: sriramk
       role: accountadmin
-      database: tasty_bytes_dbt_db
+      database: BCBS_DBT_DB
       schema: prod
-      warehouse: tasty_bytes_dbt_wh
+      warehouse: COMPUTE_WH
       threads: 8
